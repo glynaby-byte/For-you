@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>For You 💖</title>
+
+<style>
+body {
+  margin: 0;
+  font-family: 'Segoe UI', sans-serif;
+  background: linear-gradient(to bottom, #ffe4ec, #fff);
+  text-align: center;
+  overflow-x: hidden;
+}
+
+/* Card */
+.card {
+  background: white;
+  margin: 20px auto;
+  padding: 25px;
+  border-radius: 20px;
+  width: 85%;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+}
+
+button {
+  padding: 12px 20px;
+  border: none;
+  border-radius: 12px;
+  background: #ff6b81;
+  color: white;
+  cursor: pointer;
+  margin: 10px;
+  font-size: 14px;
+}
+
+button:hover {
+  background: #ff4757;
+}
+
+.hidden {
+  display: none;
+}
+
+/* Typing text */
+#message {
+  font-size: 18px;
+  min-height: 60px;
+}
+
+/* Flowers */
+.flower {
+  position: fixed;
+  top: -40px;
+  font-size: 20px;
+  animation: fall linear infinite;
+}
+
+@keyframes fall {
+  to {
+    transform: translateY(110vh);
+  }
+}
+
+/* Gallery */
+.gallery img {
+  width: 100px;
+  border-radius: 10px;
+  margin: 8px;
+}
+
+.caption {
+  font-size: 12px;
+}
+
+/* Game */
+#gameBox {
+  width: 220px;
+  height: 220px;
+  background: #fff0f5;
+  margin: 15px auto;
+  position: relative;
+  border-radius: 15px;
+}
+
+#target {
+  width: 35px;
+  height: 35px;
+  background: #ff4757;
+  border-radius: 50%;
+  position: absolute;
+  cursor: pointer;
+}
+
+</style>
+</head>
+
+<body>
+
+<h1>💖 A Little Something For You 💖</h1>
+
+<div class="card">
+  <p id="message">Tap to open your letter 💌</p>
+  <button onclick="startExperience()">Open</button>
+</div>
+
+<div class="card hidden" id="gallery">
+  <h2>📸 Our Memories</h2>
+  <div class="gallery">
+    <div>
+      <img src="https://via.placeholder.com/100">
+      <div class="caption">Our first memory</div>
+    </div>
+    <div>
+      <img src="https://via.placeholder.com/100">
+      <div class="caption">A happy moment</div>
+    </div>
+  </div>
+</div>
+
+<div class="card hidden" id="game">
+  <h2>🎮 Catch the Heart</h2>
+  <p>Score: <span id="score">0</span> | Time: <span id="time">10</span>s</p>
+  <div id="gameBox">
+    <div id="target"></div>
+  </div>
+  <p id="result"></p>
+</div>
+
+<div class="card hidden" id="surprise">
+  <h2>🎁 Surprise</h2>
+  <button onclick="showSurprise()">Click Me</button>
+  <p id="surpriseText"></p>
+</div>
+
+<button onclick="toggleMusic()">🎵 Music</button>
+
+<audio id="bgMusic" loop>
+  <source src="https://www.bensound.com/bensound-music/bensound-love.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+
+/* Typing Effect */
+const text = "Hi... I just want you to know that you are really special to me. Thank you for being part of my life 💖";
+let i = 0;
+
+function typeWriter() {
+  if (i < text.length) {
+    document.getElementById("message").innerHTML += text.charAt(i);
+    i++;
+    setTimeout(typeWriter, 40);
+  }
+}
+
+function startExperience() {
+  document.getElementById("message").innerHTML = "";
+  typeWriter();
+
+  document.getElementById("gallery").classList.remove("hidden");
+  document.getElementById("game").classList.remove("hidden");
+  document.getElementById("surprise").classList.remove("hidden");
+
+  startFlowers();
+  startGame();
+}
+
+/* Flowers */
+function startFlowers() {
+  setInterval(() => {
+    let flower = document.createElement("div");
+    flower.className = "flower";
+    flower.innerText = "🌸";
+    flower.style.left = Math.random() * 100 + "vw";
+    flower.style.animationDuration = (3 + Math.random() * 5) + "s";
+    document.body.appendChild(flower);
+
+    setTimeout(() => flower.remove(), 8000);
+  }, 300);
+}
+
+/* Game */
+let score = 0;
+let time = 10;
+
+function startGame() {
+  moveTarget();
+  let timer = setInterval(() => {
+    time--;
+    document.getElementById("time").innerText = time;
+
+    if (time <= 0) {
+      clearInterval(timer);
+      document.getElementById("result").innerText =
+        score >= 5 ? "You win 💖" : "Try again 😢";
+    }
+  }, 1000);
+
+  document.getElementById("target").onclick = () => {
+    score++;
+    document.getElementById("score").innerText = score;
+    moveTarget();
+  };
+}
+
+function moveTarget() {
+  let box = document.getElementById("gameBox");
+  let target = document.getElementById("target");
+
+  let x = Math.random() * (box.clientWidth - 35);
+  let y = Math.random() * (box.clientHeight - 35);
+
+  target.style.left = x + "px";
+  target.style.top = y + "px";
+}
+
+/* Surprise */
+function showSurprise() {
+  document.getElementById("surpriseText").innerText =
+    "No matter what happens, I'll always appreciate you 💖";
+}
+
+/* Music */
+function toggleMusic() {
+  let music = document.getElementById("bgMusic");
+  music.paused ? music.play() : music.pause();
+}
+
+</script>
+
+</body>
+</html>
